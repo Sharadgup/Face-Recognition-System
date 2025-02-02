@@ -3,6 +3,8 @@ const captureButton = document.getElementById('capture');
 const recognizeButton = document.getElementById('recognize');
 const capturedImage = document.getElementById('captured-image');
 const recognitionResult = document.getElementById('recognition-result');
+const historyButton = document.getElementById('history');
+const historyContainer = document.getElementById('history-container');
 
 // Access the user's camera
 navigator.mediaDevices.getUserMedia({ video: true })
@@ -45,4 +47,26 @@ recognizeButton.addEventListener('click', () => {
     } else {
         recognitionResult.textContent = 'Please capture an image first';
     }
+});
+
+historyButton.addEventListener('click', () => {
+    fetch('/recognition_history')
+        .then(response => response.json())
+        .then(data => {
+            let historyHTML = '<h2>Recognition History</h2><ul>';
+            data.forEach(entry => {
+                historyHTML += `<li>
+                    Name: ${entry.name}, 
+                    Confidence: ${entry.confidence.toFixed(2)}, 
+                    Temperature: ${entry.temperature.toFixed(1)}°C, 
+                    Time: ${new Date(entry.timestamp).toLocaleString()}
+                </li>`;
+            });
+            historyHTML += '</ul>';
+            historyContainer.innerHTML = historyHTML;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            historyContainer.textContent = 'Error fetching recognition history';
+        });
 });

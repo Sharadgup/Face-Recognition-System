@@ -4,8 +4,20 @@ import numpy as np
 import base64
 from PIL import Image
 import io
+from pymongo import MongoClient
+from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
+
+# MongoDB setup
+mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
+client = MongoClient(mongo_uri)
+db = client['face_recognition_db']
+recognition_collection = db['recognition_data']
 
 # Load the pre-trained face detection model
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -68,11 +80,33 @@ def recognize():
     name, confidence = result
     temperature = simulate_thermal_scan()
 
+    # Prepare data for MongoDB
+    recognition_data = {
+        "name": name,
+        "confidence": confidence,
+        "temperature": temperature,
+        "timestamp": datetime.utcnow()
+    }
+
+    # Insert data into MongoDB
+    recognition_collection.insert_one(recognition_data)
+
     return jsonify({
         "name": name,
         "confidence": f"{confidence:.2f}",
         "temperature": f"{temperature:.1f}"
     })
+
+@app.route('/recognition_history', methods=['GET'])
+def recognition_history():
+    # Retrieve the last 10 recognition entries
+    history = list(recognition_collection.find({}, {'_id': 0}).sort('timestamp', -1).limit(10))
+    
+    # Convert datetime objects to string for JSON serialization
+    for entry in history:
+        entry['timestamp'] = entry['timestamp'].isoformat()
+
+    return jsonify(history)
 
 if __name__ == '__main__':
     app.run(debug=True)

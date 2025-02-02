@@ -15,11 +15,13 @@
         <div class="button-container">
             <button id="capture">Capture</button>
             <button id="recognize">Recognize</button>
+            <button id="history">Show History</button>
         </div>
         <div class="result-container">
             <img id="captured-image" src="{{ url_for('static', filename='img/placeholder.svg') }}" alt="Captured Image">
             <div id="recognition-result"></div>
         </div>
+        <div id="history-container"></div>
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
