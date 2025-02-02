@@ -213,9 +213,9 @@ This project is licensed under the [MIT License](LICENSE). You're free to use, m
 
 For any inquiries or feedback, please contact:
 
-- **Email: shardgupta65@gmail.com
-- **GitHub: https://github.com/Sharadgup
-- **LinkedIn: https://www.linkedin.com/in/shardgupta2024/
+- Email: shardgupta65@gmail.com
+- GitHub: https://github.com/Sharadgup
+- LinkedIn: https://www.linkedin.com/in/shardgupta2024/
 
 ---
 
