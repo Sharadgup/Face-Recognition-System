@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import cv2
 import numpy as np
 import base64
@@ -51,6 +51,10 @@ def recognize_face(image):
 def simulate_thermal_scan():
     # In a real scenario, this would interface with thermal scanning hardware
     return np.random.uniform(36.0, 37.5)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/recognize', methods=['POST'])
 def recognize():
