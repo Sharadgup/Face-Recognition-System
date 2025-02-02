@@ -14,7 +14,7 @@ load_dotenv()  # Load environment variables from .env file
 app = Flask(__name__)
 
 # MongoDB setup
-mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
+mongo_uri = os.getenv('MONGO_URI', 'mongodb+srv://shardgupta65:Typer%401345@cluster0.sp87qsr.mongodb.net/')
 client = MongoClient(mongo_uri)
 db = client['face_recognition_db']
 recognition_collection = db['recognition_data']
